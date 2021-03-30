@@ -1,27 +1,26 @@
 package org.siit;
 
 
-import java.sql.Array;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
 
 public class ExpressionEvaluator {
 
     public static int evaluate(Expression expression) {
-        int result = 0;
+        int result;
         List<Object> elem = expression.getElements();
 
 
         if (elem.size() == 1){
             result = (int) elem.get(0);
         }else if (elem.size() == 3){
+            //can be replaced with evalMulti
             result = evalBinary((int) elem.get(0), (int) elem.get(2),
                     (BinaryOperator) elem.get(1));
 
         }else {
             //TODO: implement case when elem has more than 3 elements
-           result =   evalMuti(elem);
+           result =   evalMluti(elem);
         }
 
         return result;
@@ -29,32 +28,26 @@ public class ExpressionEvaluator {
 
     }
 
-    private static  int evalMuti(List<Object> elements){
-
-
+    private static  int evalMluti(List<Object> elements){
         int value = 0;
-
-//        Character[] tokensChar;
-//        tokensChar = (Character[]) elements.toArray();
         Stack<Object> ops = new Stack<>();
         Stack<Integer> values = new Stack<>();
 
-        for (int i =0 ; i < elements.size(); i++){
-            if (elements.get(i) instanceof Integer){
-            values.push((int)elements.get(i));
-            }else if (elements.get(i).equals(BinaryOperator.ADD) ||
-                    elements.get(i).equals(BinaryOperator.MULTIPLY) ||
-                    elements.get(i).equals(BinaryOperator.SUBTRACT) ||
-                    elements.get(i).equals(BinaryOperator.DIVIDE) ||
-                    elements.get(i).equals(BinaryOperator.MODULUS)){
-                while (!(ops.empty()) && (precedenceLevel((BinaryOperator) elements.get(i)) <= precedenceLevel((BinaryOperator) ops.peek()))){
+        for (Object element : elements) {
+            if (element instanceof Integer) {
+                values.push((int) element);
+            } else if (element.equals(BinaryOperator.ADD) ||
+                    element.equals(BinaryOperator.MULTIPLY) ||
+                    element.equals(BinaryOperator.SUBTRACT) ||
+                    element.equals(BinaryOperator.DIVIDE) ||
+                    element.equals(BinaryOperator.MODULUS)) {
+                while (!(ops.empty()) && (precedenceLevel((BinaryOperator) element) <=
+                        precedenceLevel((BinaryOperator) ops.peek()))
+                ) {
                     values.push(applyOp((BinaryOperator) ops.pop(), values.pop(), values.pop()));
-
                 }
-
-                ops.push(elements.get(i));
+                ops.push(element);
             }
-
 
         }
 
@@ -109,7 +102,7 @@ public class ExpressionEvaluator {
             case MODULUS:
                 return 1;
             default:
-                throw new IllegalArgumentException("Operator unkown" + op);
+                throw new IllegalArgumentException("Operator unknown" + op);
 
         }
     }

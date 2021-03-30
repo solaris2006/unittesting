@@ -21,6 +21,7 @@ public class StringExpression implements Expression {
 			elements.add(parseNumber(tokens[0]));
 
 		} else if (tokens.length == 3) {
+			elements.add(parseNumber(tokens[0]));
 			elements.add(parseOperator(tokens[1]));
 			elements.add(parseNumber(tokens[2]));
 		}else {
@@ -35,29 +36,31 @@ public class StringExpression implements Expression {
 
 		}
 
-
-
-
 	}
 
 
 
 	private BinaryOperator parseOperator(String token){
+
 		for (BinaryOperator operator : BinaryOperator.values()){
-			if(operator.getSymbol().equals(token))
+			if(operator.getSymbol().equals(token)){
 				return operator;
+			}
 		}
-		return null;
+		throw new ValidationException( token  + " not a valid operator");
+
+		//return null;
 		//throw ValidationException
+
+
 	}
 
-	private Integer parseNumber(String number){
+	private Integer parseNumber  (String number){
 
-		try {
-			return Integer.parseInt(number);
-		}catch (ValidationException e){
-			System.out.println("Not a number");
+		if ( !((Object) Integer.parseInt(number) instanceof Integer) ){
+			throw new ValidationException("Not a number");
 		}
+
 		//TODO: verify if number is a number; if not -> throw validationException
 		return Integer.parseInt(number);
 

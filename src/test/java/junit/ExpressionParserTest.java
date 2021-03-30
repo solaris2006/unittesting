@@ -30,7 +30,7 @@ public class ExpressionParserTest {
 
     @Test
     public void incorrectNumberThrowsException() {
-
+        Assertions.assertThrows(ValidationException.class, ()->new StringExpression("1 + 2.5s"));
     }
 
     @Test
@@ -41,17 +41,21 @@ public class ExpressionParserTest {
 
     @Test
     public void incorrectNumberOfTokensThrowsException() {
+        Assertions.assertThrows(ValidationException.class, ()-> new StringExpression(("1+2+")));
     }
 
 
     @Test
     public void testOperatorAndMultipleSpaces() {
-
+        StringExpression o = new StringExpression("2 +  3");
+        Assertions.assertEquals(3,  o.getElements().size());
     }
 
     @Test
     public void testConstantWithWhitespace() {
-
+        // not clear
+        // if the test consists of whitespaces within digits  logic of splitting tokens should be reconsidered as
+        // implementing a char array of tokens for a better control of handling the input stream
     }
 
 }
