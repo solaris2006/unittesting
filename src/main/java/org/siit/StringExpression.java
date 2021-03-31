@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
 
-public class StringExpression implements Expression {
+public class StringExpression implements Expression  {
 	
 	private List<Object> elements;
 	
@@ -50,13 +50,14 @@ public class StringExpression implements Expression {
 
 	}
 
-	private Integer parseNumber  (String number){
-
-		if ( !((Object) Integer.parseInt(number) instanceof Integer) ){
-			throw new ValidationException("Not a number");
+	private Integer parseNumber  (String number) throws ValidationException{
+		//TODO: verify if number is a number; if not -> throw validationException
+		try {
+			Integer.parseInt(number);
+		}catch (RuntimeException e){
+			throw new ValidationException("No a valid number");
 		}
 
-		//TODO: verify if number is a number; if not -> throw validationException
 		return Integer.parseInt(number);
 
 	}
