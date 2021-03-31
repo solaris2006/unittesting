@@ -26,14 +26,9 @@ public class StringExpression implements Expression {
 			elements.add(parseNumber(tokens[2]));
 		}else {
 		//TODO: implement case when you have more than 3 tokens: 1 + 1 * 2 / 4...
-			for (String elem : tokens){
-				if (elem.equals("+") || elem.equals("-") || elem.equals("/") || elem.equals("*") || elem.equals("%")){
-					elements.add(parseOperator(elem));
-				}else{
-					elements.add(parseNumber(elem));
-				}
+			for (int i = 0 ; i < tokens.length; i++){
+				elements.add(i % 2 == 0 ? parseNumber(tokens[i]) : parseOperator(tokens[i]));
 			}
-
 		}
 
 	}
